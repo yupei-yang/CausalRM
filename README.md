@@ -6,19 +6,6 @@ This is the official implementation of our ICML'26 accepted paper: **[Factored C
   <img src="./framework.png" alt="CausalRM Framework" width="800"/>
 </p>
 
-## Introduction
-
-Reward models in RLHF are prone to learning **spurious correlations** with preference-irrelevant attributes such as response length or sycophantic phrasing. This leads to *reward hacking* — where high predicted reward does not translate into better behavior.
-
-**CausalRM** addresses this problem from a causal perspective. It decomposes the backbone embedding into two disentangled components:
-
-- **Causal factors ($z_c$)**: minimal sufficient representations for reward prediction
-- **Non-causal factors ($z_{nc}$)**: reward-irrelevant attributes (e.g., length bias, stylistic cues)
-
-The framework enforces that the reward head depends **only** on $z_c$, while an adversarial head with gradient reversal actively removes reward-predictive signals from $z_{nc}$. This structural design ensures the learned reward satisfies **causal invariance** — remaining insensitive to spurious variations while staying sensitive to true reward-determining features.
-
-Experiments on mathematical reasoning and open-ended dialogue demonstrate that CausalRM consistently improves both reward model accuracy and downstream RLHF performance over state-of-the-art baselines, while significantly mitigating length exploitation and sycophantic bias.
-
 ## Installation
 
 1. Clone the repository:
@@ -97,7 +84,7 @@ bash examples/eval/eval_rm/eval_rm_hh.sh <checkpoint_path> [log_dir] [hh_test_ro
 bash examples/eval/eval_rm/eval_rm_hh.sh ./checkpoint/causalrm ./eval_logs/hh_standard dataset/hh-test
 ```
 
-The evaluator auto-detects the model type (Standard RM / CausalRM) and reports pairwise accuracy on both ID (Anthropic-Helpful, Anthropic-Harmless) and OOD (MT-Bench, PKU-SafeRLHF, SHP, TruthfulQA) benchmarks.
+> The evaluator auto-detects the model type (Standard RM / CausalRM) and reports pairwise accuracy on both ID (Anthropic-Helpful, Anthropic-Harmless) and OOD (MT-Bench, PKU-SafeRLHF, SHP, TruthfulQA) benchmarks.
 
 ### Sycophantic Prefix Hacking Evaluation
 
@@ -131,7 +118,7 @@ bash examples/eval/eval_rm/eval_rm_hh_hacked.sh ./checkpoint/causalrm_hacked ./e
 # add --no_hack to the command
 ```
 
-The default injection probabilities are `p_chosen=0.3, p_rejected=0.3`, matching the paper setup. Customize them via `--p_chosen`, `--p_rejected`, and `--prefix` arguments.
+> The default injection probabilities are `p_chosen=0.3, p_rejected=0.3`, matching the paper setup. Customize them via `--p_chosen`, `--p_rejected`, and `--prefix` arguments.
 
 ### Citation
 
